@@ -1,0 +1,23 @@
+{
+	"geode": "4.6.3",
+	"gd": {
+		"win": "2.2074",
+		"android": "2.2074",
+		"mac": "2.2074",
+		"ios": "2.2074"
+	},
+	"id": "natrium.bongo_cat",
+	"name": "Bongo Cat",
+	"version": "v1.0.0",
+	"developer": "Natrium",
+	"description": "Bongo Cat in GD",
+	"resources": {
+		"spritesheets": {
+			"CatSheet": [ "resources/cats/*.png" ],
+			"ExtraSheet": [ "resources/extras/*.png" ],
+			"DecoSheet": [ "resources/deco/*.png" ]
+		}
+	},
+	"repository": "https://github.com/GDNatrium/BongoCat",
+	"tags": [ "enhancement", "interface", "offline", "joke" ]
+}

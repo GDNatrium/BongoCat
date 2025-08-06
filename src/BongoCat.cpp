@@ -34,6 +34,9 @@ void BongoCat::addCat() {
 	auto posX = Mod::get()->getSavedValue<float>("posX", winSize.width - 45);
 	auto posY = Mod::get()->getSavedValue<float>("posY", 25);
 
+	if (posX > winSize.width) posX = winSize.width - 45;
+	if (posY > winSize.height) posY = 25;
+
 	cat->setScale(newScale);
 	cat->setPositionX(posX);
 	cat->setPositionY(posY);

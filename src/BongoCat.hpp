@@ -13,13 +13,14 @@ public:
 	static int m_decoID;
 	static bool m_hideInLevel;
 
+	bool ccTouchBegan(CCTouch* touch, CCEvent* event);
+	void ccTouchEnded(CCTouch* touch, CCEvent* event);
+
 private:
 	bool m_lastPaw = false;
 
 	bool init();
 	void registerWithTouchDispatcher();
-	bool ccTouchBegan(CCTouch* touch, CCEvent* event);
-	void ccTouchEnded(CCTouch* touch, CCEvent* event);
 
 	void setFrame(int frame);
 	void setToTop(float dt);

@@ -98,9 +98,9 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
 
     hatsMenu->setLayout(layout);
 
-    std::array<int, 8> unlockValuesHats = { 0, 500, 5000, 20000, 30000, 50000, 70000, 80000 };
+    std::array<int, 10> unlockValuesHats = { 0, 500, 5000, 20000, 30000, 50000, 70000, 80000, 90000, 100000 };
 
-    for (int i = 1; i <= 8; ++i) {
+    for (int i = 1; i <= 10; ++i) {
         auto catSpr = CCSprite::createWithSpriteFrameName("locked.png"_spr);
         CCSprite* hatsSpr = nullptr;
         bool isUnlocked = count >= unlockValuesHats[i - 1];
@@ -168,9 +168,9 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
 
     decoMenu->setLayout(layout);
 
-    std::array<int, 3> unlockValuesDeco = { 0, 1000, 1500 };
+    std::array<int, 5> unlockValuesDeco = { 0, 1000, 1500, 3000, 4000 };
 
-    for (int i = 1; i <= 3; ++i) {
+    for (int i = 1; i <= 5; ++i) {
         auto catSpr = CCSprite::createWithSpriteFrameName("locked.png"_spr);
         CCSprite* decoSpr = nullptr;
         bool isUnlocked = count >= unlockValuesDeco[i - 1];

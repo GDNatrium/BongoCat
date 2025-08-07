@@ -194,7 +194,7 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     settingsMenu->addChildAtPosition(createLabel("Scale"), Anchor::Top, ccp(-20, -10));
 
     settingsMenu->addChildAtPosition(createTextInputBG(), Anchor::Top, ccp(35, -11));
-    auto scale = std::to_string(catNode->getScale()).substr(0, 4);
+    auto scale = std::to_string(catNode->getScale()).substr(0, 5);
     auto scaleTextInput = createTextInput("scale", scale.c_str());
     settingsMenu->addChildAtPosition(scaleTextInput, Anchor::Top, ccp(35, -11));
 
@@ -207,7 +207,7 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     settingsMenu->addChildAtPosition(createLabel("Pos X"), Anchor::Top, ccp(-20, -65));
 
     settingsMenu->addChildAtPosition(createTextInputBG(), Anchor::Top, ccp(35, -66));
-    auto xPos = std::to_string(catNode->getPositionX()).substr(0, 4);
+    auto xPos = std::to_string(catNode->getPositionX()).substr(0, 5);
     auto posXTextInput = createTextInput("posx", xPos.c_str());
     settingsMenu->addChildAtPosition(posXTextInput, Anchor::Top, ccp(35, -66));
 
@@ -220,7 +220,7 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     settingsMenu->addChildAtPosition(createLabel("Pos Y"), Anchor::Top, ccp(-20, -120));
 
     settingsMenu->addChildAtPosition(createTextInputBG(), Anchor::Top, ccp(35, -121));
-    auto yPos = std::to_string(catNode->getPositionY()).substr(0, 4);
+    auto yPos = std::to_string(catNode->getPositionY()).substr(0, 5);
     auto posYTextInput = createTextInput("posy", yPos.c_str());
     settingsMenu->addChildAtPosition(posYTextInput, Anchor::Top, ccp(35, -121));
 
@@ -326,7 +326,7 @@ void BongoCatSettings::onScaleChange(CCObject* sender) {
     catSpr->setScale(0.25 + value * 4.75);
 
     auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<CCTextInputNode>(0);
-    textBox->setString(std::to_string(0.25 + value * 4.75).substr(0, 4));
+    textBox->setString(std::to_string(0.25 + value * 4.75).substr(0, 5));
 
     Mod::get()->setSavedValue<float>("scale", 0.25 + value * 4.75);
 }
@@ -336,7 +336,7 @@ void BongoCatSettings::onResetScale(CCObject* sender) {
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
     catSpr->setScale(1);
 
-    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<CCTextInputNode>(0)->setString("1.00");
+    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<CCTextInputNode>(0)->setString("1.000");
 
     Mod::get()->setSavedValue<float>("scale", 1);
 }
@@ -349,7 +349,7 @@ void BongoCatSettings::onPosXChange(CCObject* sender) {
     catSpr->setPositionX(45 + value * (winSize.width - 90));
 
     auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<CCTextInputNode>(1);
-    textBox->setString(std::to_string(45 + value * (winSize.width - 90)).substr(0, 4));
+    textBox->setString(std::to_string(45 + value * (winSize.width - 90)).substr(0, 5));
 
     Mod::get()->setSavedValue<float>("posX", 45 + value * (winSize.width - 90));
 }
@@ -360,7 +360,7 @@ void BongoCatSettings::onResetPosX(CCObject* sender) {
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
     catSpr->setPositionX(winSize.width - 45);
 
-    auto xPos = std::to_string(winSize.width - 45).substr(0, 4);
+    auto xPos = std::to_string(winSize.width - 45).substr(0, 5);
     static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<CCTextInputNode>(1)->setString(xPos);
 
     Mod::get()->setSavedValue<float>("posX", winSize.width - 45);
@@ -372,7 +372,7 @@ void BongoCatSettings::onPosYChange(CCObject* sender) {
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
 
     auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<CCTextInputNode>(2);
-    textBox->setString(std::to_string(25 + value * (winSize.height - 50)).substr(0, 4));
+    textBox->setString(std::to_string(25 + value * (winSize.height - 50)).substr(0, 5));
 
     catSpr->setPositionY(25 + value * (winSize.height - 50));
     Mod::get()->setSavedValue<float>("posY", 25 + value * (winSize.height - 50));
@@ -383,7 +383,7 @@ void BongoCatSettings::onResetPosY(CCObject* sender) {
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
     catSpr->setPositionY(25);
 
-    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<CCTextInputNode>(2)->setString("25.0");
+    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<CCTextInputNode>(2)->setString("25.00");
 
     Mod::get()->setSavedValue<float>("posY", 25);
 }
@@ -409,7 +409,7 @@ CCTextInputNode* BongoCatSettings::createTextInput(char const* id, char const* p
     auto textInput = CCTextInputNode::create(150, 20, placeholder, 0, "bigFont.fnt");
     textInput->setID(id);
     textInput->setDelegate(ScaleDelegate::get());
-    textInput->setMaxLabelLength(4);
+    textInput->setMaxLabelLength(5);
     textInput->setLabelPlaceholderColor({ 120, 140, 200 });
     textInput->addTextArea(TextArea::create("", "bigFont.fnt", 0.5f, 80, { 0.5, 0.5 }, 10.0f, true));
     textInput->setUserObject("fix-text-input", CCBool::create(true));

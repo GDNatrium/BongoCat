@@ -98,17 +98,26 @@ public:
         return &instance;
     }
 
+    float safeStof(const std::string& str, float fallback = 0.0f) {
+        try {
+            return std::stof(str);
+        }
+        catch (...) {
+            return fallback;
+        }
+    }
+
+
     virtual void textChanged(CCTextInputNode* p0) override {
         auto winSize = CCDirector::sharedDirector()->getWinSize();
         auto catNode = CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat");
         auto id = p0->getID();
 
         if (id == "scale") {
-            auto value = 0.0f;
-            if (p0->getString() != "") value = std::stof(p0->getString());
-            if (value < 0.01) value = 0.01;
+            float value = safeStof(p0->getString());
+            if (value < 0.01f) value = 0.01f;
 
-            auto val = (value - 0.25) / 4.75;
+            float val = (value - 0.25f) / 4.75f;
 
             auto slider = p0->getParent()->getChildByType<Slider>(0);
             slider->setValue(val);
@@ -118,10 +127,8 @@ public:
         }
 
         if (id == "posx") {
-            auto value = 0.0f;
-            if (p0->getString() != "") value = std::stof(p0->getString());
-
-            auto val = (value - 45) / (winSize.width - 90);
+            float value = safeStof(p0->getString());
+            float val = (value - 45.0f) / (winSize.width - 90.0f);
 
             auto slider = p0->getParent()->getChildByType<Slider>(1);
             slider->setValue(val);
@@ -131,10 +138,8 @@ public:
         }
 
         if (id == "posy") {
-            auto value = 0.0f;
-            if (p0->getString() != "") value = std::stof(p0->getString());
-
-            auto val = (value - 25) / (winSize.height - 50);
+            float value = safeStof(p0->getString());
+            float val = (value - 25.0f) / (winSize.height - 50.0f);
 
             auto slider = p0->getParent()->getChildByType<Slider>(2);
             slider->setValue(val);

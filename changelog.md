@@ -1,5 +1,10 @@
+# 1.1.2
+- <cy>Improved</c> text input to support excluding starting 0.
+- <cy>Improved</c> text input visuals.
+- <cr>Fixed</c> text input crashes.
+
 # 1.1.1
-- <cg>Added</c> Bongo Cat settings to the mod settings menu for if you cannot access it anymore.
+- <cg>Added</c> Bongo Cat settings to the mod settings menu.
 - <cg>Added</c> option to hide the counter.
 - <cy>Improved</c> jump handling for custom keybind support.
 - <cy>Improved</c> position options, added text inputs.

@@ -38,7 +38,15 @@ class $modify(GJBaseGameLayer) {
 		if (down && button == 1) {
 			auto runningScene = CCDirector::sharedDirector()->getRunningScene();
 			auto catNode = runningScene->getChildByType<BongoCat>(0);
-			catNode->ccTouchBegan(nullptr, nullptr);
+
+			auto label = catNode->getChildByType<CCLabelBMFont>(0);
+			auto count = std::stoi(label->getString());
+			label->setString(std::to_string(count + 1).c_str());
+
+			Mod::get()->setSavedValue<int>("count", count + 1);
+
+			catNode->setFrame(catNode->m_lastPaw ? 2 : 3);
+			catNode->m_lastPaw = !catNode->m_lastPaw;
 		}
 
 		if (!down) {

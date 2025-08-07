@@ -129,6 +129,9 @@ void BongoCat::registerWithTouchDispatcher() {
 }
 
 bool BongoCat::ccTouchBegan(CCTouch* touch, CCEvent* event) {
+	auto pauseLayer = CCDirector::sharedDirector()->getRunningScene()->getChildByType<PauseLayer>(0);
+	if ((PlayLayer::get() || LevelEditorLayer::get()) && !pauseLayer) return true;
+
 	auto label = this->getChildByType<CCLabelBMFont>(0);
 	auto count = std::stoi(label->getString());
 	label->setString(std::to_string(count + 1).c_str());

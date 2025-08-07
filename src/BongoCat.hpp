@@ -14,14 +14,14 @@ public:
 	static bool m_hideInLevel;
 	static bool m_hideCounter;
 
+	bool m_lastPaw = false;
+
 	bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 	void ccTouchEnded(CCTouch* touch, CCEvent* event);
 
 	void setFrame(int frame);
 
 private:
-	bool m_lastPaw = false;
-
 	bool init();
 	void registerWithTouchDispatcher();
 

@@ -3,10 +3,11 @@
 using namespace geode::prelude;
 
 #include <Geode/modify/MenuLayer.hpp>
-#include <Geode/modify/CCKeyboardDispatcher.hpp>
 #include <Geode/modify/VideoOptionsLayer.hpp>
+#include <Geode/modify/GJBaseGameLayer.hpp>
 
 #include "BongoCat.hpp"
+#include "BongoSettings.hpp"
 
 bool added = false;
 
@@ -30,38 +31,80 @@ class $modify(MenuLayer) {
 	}
 };
 
-class $modify(CCKeyboardDispatcher) {
-	bool dispatchKeyboardMSG(enumKeyCodes key, bool isKeyDown, bool isKeyRepeat) {
-		if(!CCKeyboardDispatcher::dispatchKeyboardMSG(key, isKeyDown, isKeyRepeat)) return false;
+class $modify(GJBaseGameLayer) {
+	void handleButton(bool down, int button, bool p2) {
+		GJBaseGameLayer::handleButton(down, button, p2);
 
-		if (!PlayLayer::get() && !LevelEditorLayer::get()) return true;
-
-		bool isJumpKey = key == enumKeyCodes::KEY_Up || key == enumKeyCodes::KEY_W || key == enumKeyCodes::KEY_Space;
-
-		if (isKeyDown && !isKeyRepeat && isJumpKey) {
+		if (down && button == 1) {
 			auto runningScene = CCDirector::sharedDirector()->getRunningScene();
 			auto catNode = runningScene->getChildByType<BongoCat>(0);
 			catNode->ccTouchBegan(nullptr, nullptr);
 		}
 
-		if (!isKeyDown) {
+		if (!down) {
 			auto runningScene = CCDirector::sharedDirector()->getRunningScene();
 			auto catNode = runningScene->getChildByType<BongoCat>(0);
-			catNode->ccTouchEnded(nullptr, nullptr);
+			catNode->setFrame(1);
 		}
-
-		return true;
 	}
 };
 
 // Fix graphics getting messed up on fullscreen switch or res change
 #ifdef GEODE_IS_DESKTOP
-
 class $modify(VideoOptionsLayer) {
 	void onApply(CCObject * sender) {
 		VideoOptionsLayer::onApply(sender);
 		added = false;
 	}
 };
-
 #endif
+
+// Add a shortcut to the bongo cat settings menu into the mod settings menu
+// since you can move the cat off-screen now and lose access to the menu
+class BongoSettings : public SettingBaseValue<int> {
+public:
+	static Result<std::shared_ptr<SettingV3>> parse(std::string const&, std::string const&, matjson::Value const&) {
+		return Ok(std::make_shared<BongoSettings>());
+	};
+	SettingNode* createNode(float width) override;
+};
+
+class ExtraBongoSettingNode : public SettingValueNode<BongoSettings> {
+protected:
+	bool init(std::shared_ptr<BongoSettings>& setting, float width) {
+		if (!SettingValueNodeV3::init(setting, width))
+			return false;
+
+		this->setContentSize({ width, 40.f });
+
+		auto* sprite = ButtonSprite::create("Open Settings", 0, false, "bigFont.fnt", "GJ_button_04.png", 24.5f, 0.4f);
+		auto* btn = CCMenuItemSpriteExtra::create(sprite, this, menu_selector(ExtraBongoSettingNode::onOpen));
+		auto* menu = CCMenu::create();
+		menu->setPosition({ width / 2, 20.f });
+		menu->addChild(btn);
+		this->addChild(menu);
+
+		return true;
+	}
+	void onOpen(CCObject*) {
+		BongoCatSettings::create()->show();
+	}
+public:
+	static ExtraBongoSettingNode* create(std::shared_ptr<BongoSettings> value, float width) {
+		auto ret = new ExtraBongoSettingNode();
+		if (ret && ret->init(value, width)) {
+			ret->autorelease();
+			return ret;
+		}
+		CC_SAFE_DELETE(ret);
+		return nullptr;
+	}
+};
+
+SettingNode* BongoSettings::createNode(float width) {
+	return ExtraBongoSettingNode::create(std::static_pointer_cast<BongoSettings>(shared_from_this()), width);
+}
+
+$execute{
+	(void)Mod::get()->registerCustomSettingType("open-menu", &BongoSettings::parse);
+}

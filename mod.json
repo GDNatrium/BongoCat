@@ -8,7 +8,7 @@
 	},
 	"id": "natrium.bongo_cat",
 	"name": "Bongo Cat",
-	"version": "v1.1.0",
+	"version": "v1.1.1",
 	"developer": "Natrium",
 	"description": "Bongo Cat in GD",
 	"resources": {
@@ -19,5 +19,10 @@
 		}
 	},
 	"repository": "https://github.com/GDNatrium/BongoCat",
-	"tags": [ "enhancement", "interface", "offline", "joke" ]
+	"tags": [ "enhancement", "interface", "offline", "joke" ],
+	"settings": {
+		"open-menu": {
+			"type": "custom:open-menu"
+		}
+	}
 }

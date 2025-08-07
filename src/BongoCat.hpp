@@ -12,9 +12,12 @@ public:
 	static int m_hatID;
 	static int m_decoID;
 	static bool m_hideInLevel;
+	static bool m_hideCounter;
 
 	bool ccTouchBegan(CCTouch* touch, CCEvent* event);
 	void ccTouchEnded(CCTouch* touch, CCEvent* event);
+
+	void setFrame(int frame);
 
 private:
 	bool m_lastPaw = false;
@@ -22,7 +25,6 @@ private:
 	bool init();
 	void registerWithTouchDispatcher();
 
-	void setFrame(int frame);
 	void setToTop(float dt);
 
 	void onSettings(CCObject* sender);

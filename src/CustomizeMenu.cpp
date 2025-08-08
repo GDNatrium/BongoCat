@@ -164,7 +164,7 @@ ScrollLayer* CustomizeMenu::createScrollLayer(std::vector<Items> items, int type
         itemMenu->addChildAtPosition(itemBtn, Anchor::Center);
 
         // Cube
-        if (items[i].name == "Dasher" && isUnlocked) {
+        if (items[i].name == std::string("Dasher") && isUnlocked) {
             auto gm = GameManager::get();
 
             auto playerHat = SimplePlayer::create(gm->getPlayerFrame());
@@ -300,7 +300,13 @@ void CustomizeMenu::onLockedItem(CCObject* sender) {
         extraText = "Deco";
     }
 
-    FLAlertLayer::create("Unlock", "<cy>" + desc + "</c> to unlock this <cg>" + extraText + "</c>!", "OK")->show();
+    auto message = CCString::createWithFormat(
+        "<cy>%s</c> to unlock this <cg>%s</c>!",
+        desc.c_str(),
+        extraText
+    )->getCString();
+
+    FLAlertLayer::create("Unlock", message, "OK")->show();
 }
 
 void CustomizeMenu::onChangePage(CCObject* sender) {

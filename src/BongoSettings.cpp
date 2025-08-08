@@ -219,7 +219,7 @@ TextInput* BongoCatSettings::createTextInput(char const* id, char const* placeho
 
         auto result = numFromString<float>(input);
 
-        if (id == "scale") {
+        if (id == std::string("scale")) {
             auto value = (result.isOk() && result.unwrap() >= 0.01f) ? result.unwrap() : 0.01f;
 
             float val = (value - 0.25f) / 4.75f;
@@ -231,7 +231,7 @@ TextInput* BongoCatSettings::createTextInput(char const* id, char const* placeho
             catNode->setScale(value);
         }
 
-        if (id == "posx") {
+        if (id == std::string("posx")) {
             auto value = result.isOk() ? result.unwrap() : 0.f;
             float val = value / winSize.width;
 
@@ -242,7 +242,7 @@ TextInput* BongoCatSettings::createTextInput(char const* id, char const* placeho
             catNode->setPositionX(value);
         }
 
-        if (id == "posy") {
+        if (id == std::string("posy")) {
             auto value = result.isOk() ? result.unwrap() : 0.f;
             float val = value / winSize.height;
 

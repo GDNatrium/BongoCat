@@ -153,8 +153,6 @@ void BongoCat::ccTouchEnded(CCTouch* touch, CCEvent* event) {
 }
 
 void BongoCat::setFrame(int frame) {
-	if (!this) return;
-
 	auto catSpr = static_cast<CCSprite*>(this->getChildByID("main"));
 	if (!catSpr) return;
 

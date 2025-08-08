@@ -3,8 +3,8 @@
 
 ## <cy>Unlockables</c>
 Unlock new designs and decorations by reaching click counts.
-- 9 Bongo Cat Designs
-- 9 Hats
+- 10 Bongo Cat Designs
+- 11 Hats
 - 4 Extra Decorations
 - and many more coming soon!
 

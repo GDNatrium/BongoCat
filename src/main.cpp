@@ -8,6 +8,7 @@ using namespace geode::prelude;
 
 #include "BongoCat.hpp"
 #include "BongoSettings.hpp"
+#include "SecretUnlocks.hpp"
 
 bool added = false;
 
@@ -44,6 +45,9 @@ class $modify(GJBaseGameLayer) {
 			label->setString(std::to_string(count + 1).c_str());
 
 			Mod::get()->setSavedValue<int>("count", count + 1);
+
+			SecretUnlocks::m_clicksThisSession++;
+			SecretUnlocks::checkSessionUnlocks();
 
 			catNode->setFrame(catNode->m_lastPaw ? 2 : 3);
 			catNode->m_lastPaw = !catNode->m_lastPaw;

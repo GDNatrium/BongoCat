@@ -1,11 +1,11 @@
-# 1.1.2
-- <cy>Improved</c> text input to support excluding starting 0.
-- <cy>Improved</c> text input visuals.
-- <cr>Fixed</c> text input crashes.
-
-# 1.1.1
+# 1.2.0
+- <cg>Added</c> new kind of unlocks & secrets!
+- <cg>Added</c> more items & changed some existing ones.
 - <cg>Added</c> Bongo Cat settings to the mod settings menu.
 - <cg>Added</c> option to hide the counter.
+- <cg>Reworked</cg> the customization menu.
+- <cg>Added</c> better unlock info.
+- <cy>Removed</c> position slider limits.
 - <cy>Improved</c> jump handling for custom keybind support.
 - <cy>Improved</c> position options, added text inputs.
 - <cr>Fixed</c> crash when entering a main level with spacebar.

@@ -19,170 +19,17 @@ bool BongoCatSettings::setup() {
 ScrollLayer* BongoCatSettings::createScrollLayer() {
     auto runningScene = CCDirector::sharedDirector()->getRunningScene();
     auto catNode = runningScene->getChildByID("natrium.bongo_cat/BongoCat");
-    int count = std::stoi(catNode->getChildByType<CCLabelBMFont>(0)->getString());
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     auto scrollLayer = ScrollLayer::create({ 300, 200 });
 
     scrollLayer->m_contentLayer->setLayout(
         ColumnLayout::create()
-        ->setGap(-1)
+        ->setGap(5)
         ->setAxisReverse(true)
         ->setAxisAlignment(AxisAlignment::End)
         ->setAutoGrowAxis(scrollLayer->getContentHeight())
     );
-
-    RowLayout* layout = RowLayout::create();
-    layout->setGap(3);
-    layout->setAutoScale(false);
-    layout->setGrowCrossAxis(true);
-    layout->setCrossAxisOverflow(true);
-
-    // cat designs
-    auto node = createSettingNode(80, false);
-    scrollLayer->m_contentLayer->addChild(node);
-
-    auto catMenu = createMenu(80);
-    catMenu->setLayout(layout);
-    node->addChildAtPosition(catMenu, Anchor::Top, ccp(0, -10));
-
-    std::array<int, 9> unlockValuesCats = { 0, 2500, 10000, 25000, 35000, 40000, 60000, 90000, 100000};
-
-    for (int i = 1; i <= 9; ++i) {
-        CCSprite* catSpr = nullptr;
-        bool isUnlocked = count >= unlockValuesCats[i - 1];
-
-        if (isUnlocked) {
-            auto spriteName = fmt::format("cat{}_2.png"_spr, i);
-            catSpr = CCSprite::createWithSpriteFrameName(spriteName.c_str());
-        }
-        else {
-            catSpr = CCSprite::createWithSpriteFrameName("locked.png"_spr);
-            auto lockLabel = CCLabelBMFont::create(std::to_string(unlockValuesCats[i - 1]).c_str(), "goldFont.fnt");
-            lockLabel->setScale(0.75);
-            lockLabel->limitLabelWidth(45, 0.75, 0.3);
-            catSpr->addChildAtPosition(lockLabel, Anchor::Center, ccp(0, -10));
-        }
-
-        catSpr->setScale(0.8f);
-
-        auto catBtn = CCMenuItemSpriteExtra::create(catSpr, catMenu, menu_selector(BongoCatSettings::onUpdateCat));
-        catBtn->setTag(i);
-
-        if (!isUnlocked)
-            catBtn->setEnabled(false);
-
-        catMenu->addChild(catBtn);
-    }
-
-    catMenu->updateLayout();
-
-    // hats
-    auto nodeHats = createSettingNode(80, true);
-    scrollLayer->m_contentLayer->addChild(nodeHats);
-
-    auto hatsMenu = createMenu(80);
-    nodeHats->addChildAtPosition(hatsMenu, Anchor::Top, ccp(0, -10));
-
-    hatsMenu->setLayout(layout);
-
-    std::array<int, 10> unlockValuesHats = { 0, 500, 5000, 20000, 30000, 50000, 70000, 80000, 90000, 100000 };
-
-    for (int i = 1; i <= 10; ++i) {
-        auto catSpr = CCSprite::createWithSpriteFrameName("locked.png"_spr);
-        CCSprite* hatsSpr = nullptr;
-        bool isUnlocked = count >= unlockValuesHats[i - 1];
-
-        if (isUnlocked) {
-            if (i != 6) {
-                auto spriteName = fmt::format("extra{}.png"_spr, i);
-                hatsSpr = CCSprite::createWithSpriteFrameName(spriteName.c_str());
-            }
-            else {
-                auto gm = GameManager::get();
-                auto playerHat = SimplePlayer::create(gm->getPlayerFrame());
-                playerHat->setColors(gm->colorForIdx(gm->getPlayerColor()), gm->colorForIdx(gm->getPlayerColor2()));
-                if (gm->m_playerGlow) playerHat->setGlowOutline(gm->colorForIdx(gm->getPlayerGlowColor()));
-                playerHat->setPosition(ccp(8, 28));
-                playerHat->setScale(0.5);
-                playerHat->setRotation(8);
-                hatsSpr = playerHat;
-            }
-        }
-        else {
-            hatsSpr = CCSprite::createWithSpriteFrameName("extraLocked.png"_spr);
-            auto lockLabel = CCLabelBMFont::create(std::to_string(unlockValuesHats[i - 1]).c_str(), "goldFont.fnt");
-            lockLabel->setScale(0.75);
-            lockLabel->limitLabelWidth(45, 0.75, 0.3);
-            hatsSpr->addChildAtPosition(lockLabel, Anchor::Center, ccp(0, -10));
-        }
-
-        if (i == 1) hatsSpr->setVisible(false);
-        hatsSpr->setAnchorPoint(ccp(0.5, 0.18));
-
-        catSpr->setScale(0.8f);
-        
-        if (i == 6 && isUnlocked) {
-            catSpr->addChildAtPosition(hatsSpr, Anchor::Center, ccp(8, 19));
-        }
-        else {
-            catSpr->addChildAtPosition(hatsSpr, Anchor::Center);
-        }
-
-        auto catBtn = CCMenuItemSpriteExtra::create(catSpr, hatsMenu, menu_selector(BongoCatSettings::onUpdateExtra));
-        catBtn->setTag(i);
-
-        if (!isUnlocked)
-            catBtn->setEnabled(false);
-
-        hatsMenu->addChild(catBtn);
-    }
-
-    hatsMenu->updateLayout();
-
-    // deco
-    auto nodeDeco = createSettingNode(50, false);
-    scrollLayer->m_contentLayer->addChild(nodeDeco);
-
-    auto decoMenu = createMenu(50);
-    nodeDeco->addChildAtPosition(decoMenu, Anchor::Top, ccp(0, -10));
-    decoMenu->setLayout(layout);
-
-    std::array<int, 5> unlockValuesDeco = { 0, 1000, 1500, 3000, 4000 };
-
-    for (int i = 1; i <= 5; ++i) {
-        auto catSpr = CCSprite::createWithSpriteFrameName("locked.png"_spr);
-        CCSprite* decoSpr = nullptr;
-        bool isUnlocked = count >= unlockValuesDeco[i - 1];
-
-        if (isUnlocked) {
-            auto spriteName = fmt::format("deco{}.png"_spr, i);
-            decoSpr = CCSprite::createWithSpriteFrameName(spriteName.c_str());
-        }
-        else {
-            decoSpr = CCSprite::createWithSpriteFrameName("extraLocked.png"_spr);
-            auto lockLabel = CCLabelBMFont::create(std::to_string(unlockValuesDeco[i - 1]).c_str(), "goldFont.fnt");
-            lockLabel->setScale(0.75);
-            lockLabel->limitLabelWidth(45, 0.75, 0.3);
-            decoSpr->addChildAtPosition(lockLabel, Anchor::Center, ccp(0, -10));
-        }
-
-        if (i == 1) decoSpr->setVisible(false);
-        decoSpr->setAnchorPoint(ccp(0.5, 0.18));
-
-        catSpr->setScale(0.8f);
-        catSpr->addChildAtPosition(decoSpr, Anchor::Center);
-
-        auto catBtn = CCMenuItemSpriteExtra::create(catSpr, decoMenu, menu_selector(BongoCatSettings::onUpdateDeco));
-        catBtn->setTag(i);
-
-        if (!isUnlocked)
-            catBtn->setEnabled(false);
-
-        decoMenu->addChild(catBtn);
-    }
-
-    decoMenu->updateLayout();
 
     // settings
     auto nodeSettings = createSettingNode(260, true);
@@ -191,46 +38,43 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     auto settingsMenu = createMenu(260);
     nodeSettings->addChildAtPosition(settingsMenu, Anchor::Top, ccp(0, -10));
 
-    settingsMenu->addChildAtPosition(createLabel("Scale"), Anchor::Top, ccp(-20, -10));
+    settingsMenu->addChildAtPosition(createLabel("Scale", false), Anchor::Top, ccp(-20, -10));
 
-    settingsMenu->addChildAtPosition(createTextInputBG(), Anchor::Top, ccp(35, -11));
     auto scale = std::to_string(catNode->getScale()).substr(0, 5);
     auto scaleTextInput = createTextInput("scale", scale.c_str());
     settingsMenu->addChildAtPosition(scaleTextInput, Anchor::Top, ccp(35, -11));
 
     auto scaleVal = (catNode->getScale() - 0.25) / 4.75;
-    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onScaleChange), scaleVal), Anchor::Center, ccp(-20, 100));
+    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onScaleChange), scaleVal), Anchor::Center, ccp(-20, 95));
     
-    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetScale)), Anchor::Center, ccp(120, 100));
+    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetScale)), Anchor::Center, ccp(120, 95));
 
     // Pos X
-    settingsMenu->addChildAtPosition(createLabel("Pos X"), Anchor::Top, ccp(-20, -65));
+    settingsMenu->addChildAtPosition(createLabel("Pos X", false), Anchor::Top, ccp(-20, -65));
 
-    settingsMenu->addChildAtPosition(createTextInputBG(), Anchor::Top, ccp(35, -66));
     auto xPos = std::to_string(catNode->getPositionX()).substr(0, 5);
     auto posXTextInput = createTextInput("posx", xPos.c_str());
     settingsMenu->addChildAtPosition(posXTextInput, Anchor::Top, ccp(35, -66));
 
-    auto posXVal = (catNode->getPositionX() - 45) / (winSize.width - 90);
-    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onPosXChange), posXVal), Anchor::Center, ccp(-20, 45));
+    auto posXVal = catNode->getPositionX() / winSize.width;
+    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onPosXChange), posXVal), Anchor::Center, ccp(-20, 40));
 
-    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetPosX)), Anchor::Center, ccp(120, 45));
+    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetPosX)), Anchor::Center, ccp(120, 40));
 
     // Pos Y
-    settingsMenu->addChildAtPosition(createLabel("Pos Y"), Anchor::Top, ccp(-20, -120));
+    settingsMenu->addChildAtPosition(createLabel("Pos Y", false), Anchor::Top, ccp(-20, -120));
 
-    settingsMenu->addChildAtPosition(createTextInputBG(), Anchor::Top, ccp(35, -121));
     auto yPos = std::to_string(catNode->getPositionY()).substr(0, 5);
     auto posYTextInput = createTextInput("posy", yPos.c_str());
     settingsMenu->addChildAtPosition(posYTextInput, Anchor::Top, ccp(35, -121));
 
-    auto posYVal = (catNode->getPositionY() - 25) / (winSize.height - 50);
-    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onPosYChange), posYVal), Anchor::Center, ccp(-20, -10));
+    auto posYVal = catNode->getPositionY() / winSize.height;
+    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onPosYChange), posYVal), Anchor::Center, ccp(-20, -15));
 
-    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetPosY)), Anchor::Center, ccp(120, -10));
+    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetPosY)), Anchor::Center, ccp(120, -15));
 
     // Flip X
-    settingsMenu->addChildAtPosition(createLabel("Flip X"), Anchor::Top, ccp(-70, -185));
+    settingsMenu->addChildAtPosition(createLabel("Flip X", true), Anchor::Top, ccp(-105, -185));
 
     auto checkBoxSpriteOff = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
     checkBoxSpriteOff->setScale(0.6f);
@@ -242,23 +86,23 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     if (Mod::get()->getSavedValue<int>("scaleX") < 0) checkBoxButton->toggle(true);
 
     // Hide in Level
-    settingsMenu->addChildAtPosition(createLabel("Hide in level"), Anchor::Top, ccp(75, -185));
+    settingsMenu->addChildAtPosition(createLabel("Hide in level", true), Anchor::Top, ccp(30, -185));
     auto hideInLevelCheck = CCMenuItemToggler::create(checkBoxSpriteOff, checkBoxSpriteOn, this, menu_selector(BongoCatSettings::onHideInLevel));
 
-    settingsMenu->addChildAtPosition(hideInLevelCheck, Anchor::Center, ccp(0, -55));
+    settingsMenu->addChildAtPosition(hideInLevelCheck, Anchor::Center, ccp(15, -55));
     if (Mod::get()->getSavedValue<bool>("hideLevel")) hideInLevelCheck->toggle(true);
 
     // Hide Counter
-    settingsMenu->addChildAtPosition(createLabel("Hide Counter"), Anchor::Top, ccp(-40, -220));
+    settingsMenu->addChildAtPosition(createLabel("Hide Counter", true), Anchor::Top, ccp(-105, -220));
     auto hideCounterCheck = CCMenuItemToggler::create(checkBoxSpriteOff, checkBoxSpriteOn, this, menu_selector(BongoCatSettings::onHideCounter));
 
     settingsMenu->addChildAtPosition(hideCounterCheck, Anchor::Center, ccp(-120, -90));
     if (Mod::get()->getSavedValue<bool>("hideCounter")) hideCounterCheck->toggle(true);
 
     auto infoSpr = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
-    infoSpr->setScale(0.5);
+    infoSpr->setScale(0.4);
     auto infoBtn = CCMenuItemSpriteExtra::create(infoSpr, this, menu_selector(BongoCatSettings::onShowInfo));
-    settingsMenu->addChildAtPosition(infoBtn, Anchor::Center, ccp(25, -85));
+    settingsMenu->addChildAtPosition(infoBtn, Anchor::Center, ccp(-135, -80));
 
     // ----------
 
@@ -267,65 +111,13 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     return scrollLayer;
 }
 
-void BongoCatSettings::onUpdateCat(CCObject* sender) {
-    BongoCat::m_catID = sender->getTag();
-
-    auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat")->getChildByID("main"));
-    if (!catSpr) return;
-
-    std::string name = fmt::format("cat{}_{}.png"_spr, BongoCat::m_catID, 1);
-    auto frameSpr = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(name.c_str());
-    if (frameSpr) catSpr->setDisplayFrame(frameSpr);
-
-    Mod::get()->setSavedValue<int>("cat", BongoCat::m_catID);
-}
-
-void BongoCatSettings::onUpdateExtra(CCObject* sender) {
-    BongoCat::m_hatID = sender->getTag();
-
-    auto extraSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat")->getChildByID("hat"));
-    if (!extraSpr) return;
-
-    if (BongoCat::m_hatID == 1) extraSpr->setVisible(false);
-    else if (BongoCat::m_hatID == 6) {
-        extraSpr->setVisible(false);
-        static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat")->getChildByID("hat2"))->setVisible(true);
-    }
-    else {
-        extraSpr->setVisible(true);
-        static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat")->getChildByID("hat2"))->setVisible(false);
-    }
-
-    std::string name = fmt::format("extra{}.png"_spr, BongoCat::m_hatID);
-    auto frameSpr = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(name.c_str());
-    if (frameSpr) extraSpr->setDisplayFrame(frameSpr);
-
-    Mod::get()->setSavedValue<int>("extra", BongoCat::m_hatID);
-}
-
-void BongoCatSettings::onUpdateDeco(CCObject* sender) {
-    BongoCat::m_decoID = sender->getTag();
-
-    auto extraSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat")->getChildByID("deco"));
-    if (!extraSpr) return;
-
-    if (BongoCat::m_decoID == 1) extraSpr->setVisible(false);
-    else extraSpr->setVisible(true);
-
-    std::string name = fmt::format("deco{}.png"_spr, BongoCat::m_decoID);
-    auto frameSpr = CCSpriteFrameCache::sharedSpriteFrameCache()->spriteFrameByName(name.c_str());
-    if (frameSpr) extraSpr->setDisplayFrame(frameSpr);
-
-    Mod::get()->setSavedValue<int>("deco", BongoCat::m_decoID);
-}
-
 void BongoCatSettings::onScaleChange(CCObject* sender) {
     auto value = static_cast<SliderThumb*>(sender)->getValue();
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
 
     catSpr->setScale(0.25 + value * 4.75);
 
-    auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<CCTextInputNode>(0);
+    auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<TextInput>(0);
     textBox->setString(std::to_string(0.25 + value * 4.75).substr(0, 5));
 
     Mod::get()->setSavedValue<float>("scale", 0.25 + value * 4.75);
@@ -336,7 +128,7 @@ void BongoCatSettings::onResetScale(CCObject* sender) {
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
     catSpr->setScale(1);
 
-    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<CCTextInputNode>(0)->setString("1.000");
+    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<TextInput>(0)->setString("1.000");
 
     Mod::get()->setSavedValue<float>("scale", 1);
 }
@@ -346,22 +138,24 @@ void BongoCatSettings::onPosXChange(CCObject* sender) {
     auto value = static_cast<SliderThumb*>(sender)->getValue();
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
 
-    catSpr->setPositionX(45 + value * (winSize.width - 90));
+    auto posX = value * winSize.width;
 
-    auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<CCTextInputNode>(1);
-    textBox->setString(std::to_string(45 + value * (winSize.width - 90)).substr(0, 5));
+    catSpr->setPositionX(posX);
 
-    Mod::get()->setSavedValue<float>("posX", 45 + value * (winSize.width - 90));
+    auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<TextInput>(1);
+    textBox->setString(std::to_string(posX).substr(0, 5));
+
+    Mod::get()->setSavedValue<float>("posX", posX);
 }
 
 void BongoCatSettings::onResetPosX(CCObject* sender) {
     auto winSize = CCDirector::sharedDirector()->getWinSize();
-    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<Slider>(1)->setValue(1);
+    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<Slider>(1)->setValue((winSize.width - 45) / winSize.width);
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
     catSpr->setPositionX(winSize.width - 45);
 
     auto xPos = std::to_string(winSize.width - 45).substr(0, 5);
-    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<CCTextInputNode>(1)->setString(xPos);
+    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<TextInput>(1)->setString(xPos);
 
     Mod::get()->setSavedValue<float>("posX", winSize.width - 45);
 }
@@ -371,19 +165,22 @@ void BongoCatSettings::onPosYChange(CCObject* sender) {
     auto value = static_cast<SliderThumb*>(sender)->getValue();
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
 
-    auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<CCTextInputNode>(2);
-    textBox->setString(std::to_string(25 + value * (winSize.height - 50)).substr(0, 5));
+    auto yPos = value * winSize.height;
 
-    catSpr->setPositionY(25 + value * (winSize.height - 50));
-    Mod::get()->setSavedValue<float>("posY", 25 + value * (winSize.height - 50));
+    auto textBox = static_cast<SliderThumb*>(sender)->getParent()->getParent()->getParent()->getChildByType<TextInput>(2);
+    textBox->setString(std::to_string(yPos).substr(0, 5));
+
+    catSpr->setPositionY(yPos);
+    Mod::get()->setSavedValue<float>("posY", yPos);
 }
 
 void BongoCatSettings::onResetPosY(CCObject* sender) {
-    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<Slider>(2)->setValue(0);
+    auto winSize = CCDirector::sharedDirector()->getWinSize();
+    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<Slider>(2)->setValue(25 / winSize.height);
     auto catSpr = static_cast<CCSprite*>(CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat"));
     catSpr->setPositionY(25);
 
-    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<CCTextInputNode>(2)->setString("25.00");
+    static_cast<CCMenuItemSpriteExtra*>(sender)->getParent()->getChildByType<TextInput>(2)->setString("25.00");
 
     Mod::get()->setSavedValue<float>("posY", 25);
 }
@@ -405,8 +202,8 @@ void BongoCatSettings::onHideInLevel(CCObject* sender) {
     Mod::get()->setSavedValue<bool>("hideLevel", BongoCat::m_hideInLevel);
 }
 
-CCTextInputNode* BongoCatSettings::createTextInput(char const* id, char const* placeholder) {
-    auto textInput = CCTextInputNode::create(150, 20, placeholder, 0, "bigFont.fnt");
+TextInput* BongoCatSettings::createTextInput(char const* id, char const* placeholder) {
+    /*auto textInput = CCTextInputNode::create(150, 20, placeholder, 0, "bigFont.fnt");
     textInput->setID(id);
     textInput->setDelegate(ScaleDelegate::get());
     textInput->setMaxLabelLength(5);
@@ -415,8 +212,60 @@ CCTextInputNode* BongoCatSettings::createTextInput(char const* id, char const* p
     textInput->setUserObject("fix-text-input", CCBool::create(true));
     textInput->setAllowedChars("0123456789.-");
     textInput->setAnchorPoint(CCPoint(0, 0.1));
-    textInput->setScale(0.4f);
+    textInput->setScale(0.4f);*/
 
+    auto textInput = TextInput::create(150, placeholder);
+    textInput->getInputNode()->addTextArea(TextArea::create("", "bigFont.fnt", 0.5f, 80, { 0.5, 0.5 }, 10.0f, true));
+    textInput->setID(id);
+    textInput->setMaxCharCount(5);
+    textInput->setFilter("0123456789.-");
+    textInput->getBGSprite()->setContentSize({ 200, 60 });
+    textInput->setScale(0.5);
+    textInput->getInputNode()->setScale(1.5);
+    textInput->getInputNode()->setAnchorPoint(ccp(0, -0.1));
+
+    textInput->setCallback([=](const std::string& input) {
+        auto winSize = CCDirector::sharedDirector()->getWinSize();
+        auto catNode = CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat");
+
+        auto result = numFromString<float>(input);
+
+        if (id == "scale") {
+            auto value = (result.isOk() && result.unwrap() >= 0.01f) ? result.unwrap() : 0.01f;
+
+            float val = (value - 0.25f) / 4.75f;
+            auto slider = textInput->getParent()->getChildByType<Slider>(0);
+
+            slider->setValue(val);
+            slider->updateBar();
+
+            catNode->setScale(value);
+        }
+
+        if (id == "posx") {
+            auto value = result.isOk() ? result.unwrap() : 0.f;
+            float val = value / winSize.width;
+
+            auto slider = textInput->getParent()->getChildByType<Slider>(1);
+            slider->setValue(val);
+            slider->updateBar();
+
+            catNode->setPositionX(value);
+        }
+
+        if (id == "posy") {
+            auto value = result.isOk() ? result.unwrap() : 0.f;
+            float val = value / winSize.height;
+
+            auto slider = textInput->getParent()->getChildByType<Slider>(2);
+            slider->setValue(val);
+            slider->updateBar();
+
+            catNode->setPositionY(value);
+        }
+
+        });
+     
     return textInput;
 }
 

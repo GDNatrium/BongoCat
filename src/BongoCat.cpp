@@ -1,5 +1,6 @@
 #include "BongoCat.hpp"
-#include "BongoSettings.hpp"
+#include "CustomizeMenu.hpp"
+#include "SecretUnlocks.hpp"
 
 int BongoCat::m_catID = 1;
 int BongoCat::m_hatID = 1;
@@ -109,7 +110,6 @@ void BongoCat::addCat() {
 	if (m_hideCounter) menu->setVisible(false);
 
 	auto amount = Mod::get()->getSavedValue<int>("count", 0);
-	// auto amount = 99980;
 	auto count = CCLabelBMFont::create(std::to_string(amount).c_str(), "goldFont.fnt");
 	count->setAnchorPoint(ccp(0, 0.5));
 	count->setPosition(ccp(-36, -9));
@@ -139,6 +139,9 @@ bool BongoCat::ccTouchBegan(CCTouch* touch, CCEvent* event) {
 	label->setString(std::to_string(count + 1).c_str());
 
 	Mod::get()->setSavedValue<int>("count", count + 1);
+
+	SecretUnlocks::m_clicksThisSession++;
+	SecretUnlocks::checkSessionUnlocks();
 
 	setFrame(m_lastPaw ? 2 : 3);
 	m_lastPaw = !m_lastPaw;
@@ -216,6 +219,6 @@ void BongoCat::setToTop(float dt) {
 
 void BongoCat::onSettings(CCObject* sender) {
 	if (!CCDirector::sharedDirector()->getRunningScene()->getChildByID("BongoCatSettings")) {
-		BongoCatSettings::create()->show();
+		CustomizeMenu::create()->show();
 	}
 }

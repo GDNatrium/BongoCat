@@ -23,10 +23,6 @@ public:
 private:
     ScrollLayer* createScrollLayer();
 
-    void onUpdateCat(CCObject* sender);
-    void onUpdateExtra(CCObject* sender);
-    void onUpdateDeco(CCObject* sender);
-
     void onScaleChange(CCObject* sender);
     void onResetScale(CCObject* sender);
 
@@ -40,6 +36,8 @@ private:
     void onHideInLevel(CCObject* sender);
     void onHideCounter(CCObject* sender);
     void onShowInfo(CCObject* sender);
+
+    TextInput* createTextInput(char const* id, char const* placeholder);
 
     CCNode* createSettingNode(float height, bool darker) {
         auto node = CCNode::create();
@@ -59,22 +57,12 @@ private:
         return menu;
     }
 
-    CCLabelBMFont* createLabel(char const* txt) {
+    CCLabelBMFont* createLabel(char const* txt, bool leftAlign) {
         auto label = CCLabelBMFont::create(txt, "bigFont.fnt");
-        label->setScale(0.5);
+        label->limitLabelWidth(100, 0.5, 0.1);
+        if(leftAlign) label->setAnchorPoint(ccp(0, 0.5));
         return label;
     }
-
-    CCScale9Sprite* createTextInputBG() {
-        auto bg = CCScale9Sprite::create("square02b_001.png");
-        bg->setColor({ 0,0,0 });
-        bg->setOpacity(100);
-        bg->setContentSize({ 200, 60 });
-        bg->setScale(0.25f);
-        return bg;
-    }
-
-    CCTextInputNode* createTextInput(char const* id, char const* placeholder);
 
     Slider* createSlider(SEL_MenuHandler menu, float val) {
         auto slider = Slider::create(this, menu);
@@ -88,64 +76,5 @@ private:
         resetSpr->setScale(0.75);
         auto resetBtn = CCMenuItemSpriteExtra::create(resetSpr, this, menu);
         return resetBtn;
-    }
-};
-
-class ScaleDelegate : public TextInputDelegate {
-public:
-    static ScaleDelegate* get() {
-        static ScaleDelegate instance;
-        return &instance;
-    }
-
-    float safeStof(const std::string& str, float fallback = 0.0f) {
-        try {
-            return std::stof(str);
-        }
-        catch (...) {
-            return fallback;
-        }
-    }
-
-
-    virtual void textChanged(CCTextInputNode* p0) override {
-        auto winSize = CCDirector::sharedDirector()->getWinSize();
-        auto catNode = CCDirector::sharedDirector()->getRunningScene()->getChildByID("natrium.bongo_cat/BongoCat");
-        auto id = p0->getID();
-
-        if (id == "scale") {
-            float value = safeStof(p0->getString());
-            if (value < 0.01f) value = 0.01f;
-
-            float val = (value - 0.25f) / 4.75f;
-
-            auto slider = p0->getParent()->getChildByType<Slider>(0);
-            slider->setValue(val);
-            slider->updateBar();
-
-            catNode->setScale(value);
-        }
-
-        if (id == "posx") {
-            float value = safeStof(p0->getString());
-            float val = (value - 45.0f) / (winSize.width - 90.0f);
-
-            auto slider = p0->getParent()->getChildByType<Slider>(1);
-            slider->setValue(val);
-            slider->updateBar();
-
-            catNode->setPositionX(value);
-        }
-
-        if (id == "posy") {
-            float value = safeStof(p0->getString());
-            float val = (value - 25.0f) / (winSize.height - 50.0f);
-
-            auto slider = p0->getParent()->getChildByType<Slider>(2);
-            slider->setValue(val);
-            slider->updateBar();
-
-            catNode->setPositionY(value);
-        }
     }
 };

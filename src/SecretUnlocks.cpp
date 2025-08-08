@@ -130,7 +130,7 @@ void SecretUnlocks::secretThree() {
 
 	if (m_clicksThisSession >= 2500) {
 		Mod::get()->setSavedValue<bool>("secret3", true);
-		m_secret2 = true;
+		m_secret3 = true;
 
 		auto mainLayer = CCDirector::sharedDirector()->getRunningScene()->getChildByType<CustomizeMenu>(0)->m_mainLayer;
 		mainLayer->getChildByID("ScrollLayer")->removeFromParentAndCleanup(true);

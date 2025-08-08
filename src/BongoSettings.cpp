@@ -203,17 +203,6 @@ void BongoCatSettings::onHideInLevel(CCObject* sender) {
 }
 
 TextInput* BongoCatSettings::createTextInput(char const* id, char const* placeholder) {
-    /*auto textInput = CCTextInputNode::create(150, 20, placeholder, 0, "bigFont.fnt");
-    textInput->setID(id);
-    textInput->setDelegate(ScaleDelegate::get());
-    textInput->setMaxLabelLength(5);
-    textInput->setLabelPlaceholderColor({ 120, 140, 200 });
-    textInput->addTextArea(TextArea::create("", "bigFont.fnt", 0.5f, 80, { 0.5, 0.5 }, 10.0f, true));
-    textInput->setUserObject("fix-text-input", CCBool::create(true));
-    textInput->setAllowedChars("0123456789.-");
-    textInput->setAnchorPoint(CCPoint(0, 0.1));
-    textInput->setScale(0.4f);*/
-
     auto textInput = TextInput::create(150, placeholder);
     textInput->getInputNode()->addTextArea(TextArea::create("", "bigFont.fnt", 0.5f, 80, { 0.5, 0.5 }, 10.0f, true));
     textInput->setID(id);

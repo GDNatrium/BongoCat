@@ -13,6 +13,7 @@ public:
 	static int m_decoID;
 	static bool m_hideInLevel;
 	static bool m_hideCounter;
+	static int m_pawsToUse; // 1 = Only Left, 2 = Only Right, 3 = Both
 
 	bool m_lastPaw = false;
 

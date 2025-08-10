@@ -1,5 +1,6 @@
 #include "BongoSettings.hpp"
 #include "BongoCat.hpp"
+#include "EditCounterMenu.hpp"
 
 bool BongoCatSettings::setup() {
     this->setID("BongoCatSettings");
@@ -32,10 +33,10 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     );
 
     // settings
-    auto nodeSettings = createSettingNode(260, true);
+    auto nodeSettings = createSettingNode(290, true);
     scrollLayer->m_contentLayer->addChild(nodeSettings);
 
-    auto settingsMenu = createMenu(260);
+    auto settingsMenu = createMenu(290);
     nodeSettings->addChildAtPosition(settingsMenu, Anchor::Top, ccp(0, -10));
 
     settingsMenu->addChildAtPosition(createLabel("Scale", false), Anchor::Top, ccp(-20, -10));
@@ -45,9 +46,9 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     settingsMenu->addChildAtPosition(scaleTextInput, Anchor::Top, ccp(35, -11));
 
     auto scaleVal = (catNode->getScale() - 0.25) / 4.75;
-    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onScaleChange), scaleVal), Anchor::Center, ccp(-20, 95));
+    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onScaleChange), scaleVal), Anchor::Top, ccp(-20, -35));
     
-    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetScale)), Anchor::Center, ccp(120, 95));
+    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetScale)), Anchor::Top, ccp(120, -35));
 
     // Pos X
     settingsMenu->addChildAtPosition(createLabel("Pos X", false), Anchor::Top, ccp(-20, -65));
@@ -57,9 +58,9 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     settingsMenu->addChildAtPosition(posXTextInput, Anchor::Top, ccp(35, -66));
 
     auto posXVal = catNode->getPositionX() / winSize.width;
-    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onPosXChange), posXVal), Anchor::Center, ccp(-20, 40));
+    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onPosXChange), posXVal), Anchor::Top, ccp(-20, -90));
 
-    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetPosX)), Anchor::Center, ccp(120, 40));
+    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetPosX)), Anchor::Top, ccp(120, -90));
 
     // Pos Y
     settingsMenu->addChildAtPosition(createLabel("Pos Y", false), Anchor::Top, ccp(-20, -120));
@@ -69,9 +70,9 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     settingsMenu->addChildAtPosition(posYTextInput, Anchor::Top, ccp(35, -121));
 
     auto posYVal = catNode->getPositionY() / winSize.height;
-    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onPosYChange), posYVal), Anchor::Center, ccp(-20, -15));
+    settingsMenu->addChildAtPosition(createSlider(menu_selector(BongoCatSettings::onPosYChange), posYVal), Anchor::Top, ccp(-20, -145));
 
-    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetPosY)), Anchor::Center, ccp(120, -15));
+    settingsMenu->addChildAtPosition(createResetButton(menu_selector(BongoCatSettings::onResetPosY)), Anchor::Top, ccp(120, -145));
 
     // Flip X
     settingsMenu->addChildAtPosition(createLabel("Flip X", true), Anchor::Top, ccp(-105, -185));
@@ -82,27 +83,49 @@ ScrollLayer* BongoCatSettings::createScrollLayer() {
     checkBoxSpriteOn->setScale(0.6f);
     auto checkBoxButton = CCMenuItemToggler::create(checkBoxSpriteOff, checkBoxSpriteOn, this, menu_selector(BongoCatSettings::onFlipX));
 
-    settingsMenu->addChildAtPosition(checkBoxButton, Anchor::Center, ccp(-120, -55));
+    settingsMenu->addChildAtPosition(checkBoxButton, Anchor::Top, ccp(-120, -185));
     if (Mod::get()->getSavedValue<int>("scaleX") < 0) checkBoxButton->toggle(true);
 
     // Hide in Level
     settingsMenu->addChildAtPosition(createLabel("Hide in level", true), Anchor::Top, ccp(30, -185));
     auto hideInLevelCheck = CCMenuItemToggler::create(checkBoxSpriteOff, checkBoxSpriteOn, this, menu_selector(BongoCatSettings::onHideInLevel));
 
-    settingsMenu->addChildAtPosition(hideInLevelCheck, Anchor::Center, ccp(15, -55));
+    settingsMenu->addChildAtPosition(hideInLevelCheck, Anchor::Top, ccp(15, -185));
     if (Mod::get()->getSavedValue<bool>("hideLevel")) hideInLevelCheck->toggle(true);
 
     // Hide Counter
     settingsMenu->addChildAtPosition(createLabel("Hide Counter", true), Anchor::Top, ccp(-105, -220));
     auto hideCounterCheck = CCMenuItemToggler::create(checkBoxSpriteOff, checkBoxSpriteOn, this, menu_selector(BongoCatSettings::onHideCounter));
 
-    settingsMenu->addChildAtPosition(hideCounterCheck, Anchor::Center, ccp(-120, -90));
+    settingsMenu->addChildAtPosition(hideCounterCheck, Anchor::Top, ccp(-120, -220));
     if (Mod::get()->getSavedValue<bool>("hideCounter")) hideCounterCheck->toggle(true);
 
     auto infoSpr = CCSprite::createWithSpriteFrameName("GJ_infoIcon_001.png");
     infoSpr->setScale(0.4);
     auto infoBtn = CCMenuItemSpriteExtra::create(infoSpr, this, menu_selector(BongoCatSettings::onShowInfo));
-    settingsMenu->addChildAtPosition(infoBtn, Anchor::Center, ccp(-135, -80));
+    settingsMenu->addChildAtPosition(infoBtn, Anchor::Top, ccp(-135, -210));
+
+    // Edit Counter
+    settingsMenu->addChildAtPosition(createLabel("Edit Counter", true), Anchor::Top, ccp(30, -220));
+    auto editCounterSpr = CCSprite::createWithSpriteFrameName("GJ_plus3Btn_001.png");
+    auto editCounterBtn = CCMenuItemSpriteExtra::create(editCounterSpr, this, menu_selector(BongoCatSettings::onEditCounter));
+
+    settingsMenu->addChildAtPosition(editCounterBtn, Anchor::Top, ccp(15, -220));
+
+    // Use left paw
+    settingsMenu->addChildAtPosition(createLabel("Use Left Paw", true), Anchor::Top, ccp(-105, -255));
+    auto leftPawCheck = CCMenuItemToggler::create(checkBoxSpriteOff, checkBoxSpriteOn, this, menu_selector(BongoCatSettings::onUseLeftPaw));
+
+    settingsMenu->addChildAtPosition(leftPawCheck, Anchor::Top, ccp(-120, -255));
+    if (Mod::get()->getSavedValue<int>("pawsMode") % 2 == 1) leftPawCheck->toggle(true);
+
+    // Use right paw
+    settingsMenu->addChildAtPosition(createLabel("Use Right Paw", true), Anchor::Top, ccp(30, -255));
+    auto rightPawCheck = CCMenuItemToggler::create(checkBoxSpriteOff, checkBoxSpriteOn, this, menu_selector(BongoCatSettings::onUseRightPaw));
+
+    settingsMenu->addChildAtPosition(rightPawCheck, Anchor::Top, ccp(15, -255));
+    auto savedVal = Mod::get()->getSavedValue<int>("pawsMode");
+    if (savedVal == 2 || savedVal == 3) rightPawCheck->toggle(true);
 
     // ----------
 
@@ -268,4 +291,24 @@ void BongoCatSettings::onShowInfo(CCObject* sender) {
         "You can also access this menu through the <cy>Mod Settings Menu</c> "
         "if you can't open it through the normal button anymore.", 
         "OK")->show();
+}
+
+void BongoCatSettings::onEditCounter(CCObject* sender) {
+    EditCounterMenu::create()->show();
+}
+
+void BongoCatSettings::onUseLeftPaw(CCObject* sender) {
+    auto currentPaws = BongoCat::m_pawsToUse;
+    if (currentPaws % 2 == 0) BongoCat::m_pawsToUse++;
+    else BongoCat::m_pawsToUse--;
+
+    Mod::get()->setSavedValue<int>("pawsMode", BongoCat::m_pawsToUse);
+}
+
+void BongoCatSettings::onUseRightPaw(CCObject* sender) {
+    auto currentPaws = BongoCat::m_pawsToUse;
+    if (currentPaws == 0 || currentPaws == 1) BongoCat::m_pawsToUse += 2;
+    else BongoCat::m_pawsToUse -= 2;
+
+    Mod::get()->setSavedValue<int>("pawsMode", BongoCat::m_pawsToUse);
 }

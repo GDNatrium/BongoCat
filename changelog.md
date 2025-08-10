@@ -1,3 +1,9 @@
+## 1.2.1
+- <cg>Added</c> options for changing what paws to use.
+- <cg>Added</c> options to customize the counter.
+- <cr>Fixed</c> editor popups appearing behind their parents sometimes.
+- <cr>Fixed</c> disabling the extra decoration not saving correctly sometimes.
+
 # 1.2.0
 - <cg>Added</c> new kind of unlocks & secrets!
 - <cg>Added</c> more items & changed some existing ones.

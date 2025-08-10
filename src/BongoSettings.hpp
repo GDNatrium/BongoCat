@@ -34,8 +34,13 @@ private:
 
     void onFlipX(CCObject* sender);
     void onHideInLevel(CCObject* sender);
+
     void onHideCounter(CCObject* sender);
     void onShowInfo(CCObject* sender);
+    void onEditCounter(CCObject* sender);
+
+    void onUseLeftPaw(CCObject* sender);
+    void onUseRightPaw(CCObject* sender);
 
     TextInput* createTextInput(char const* id, char const* placeholder);
 

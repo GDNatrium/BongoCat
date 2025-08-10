@@ -63,9 +63,9 @@ bool EditCounterMenu::setup() {
 
     auto fntFile = bongoCat->getChildByType<CCLabelBMFont>(0)->getFntFile();
 
-    setPageId(fntFile);
+    if(m_page == -1) m_page = Mod::get()->getSavedValue<int>("font", 0);
 
-    auto fontPreview = CCLabelBMFont::create(getFontText(fntFile).c_str(), fntFile);
+    auto fontPreview = CCLabelBMFont::create(getFontText(m_page).c_str(), fntFile);
     fontPreview->setScale(m_page == 0 ? 0.8 : 0.65);
     fontMenu->addChildAtPosition(fontPreview, Anchor::Center);
 
@@ -103,7 +103,7 @@ void EditCounterMenu::onChangeFont(CCObject* sender) {
     if (m_page < 0) m_page = 61;
 
     auto newFntFile = getFontByID(m_page);
-    auto newFntText = getFontText(newFntFile);
+    auto newFntText = getFontText(m_page);
 
     previewLabel->setScale(m_page == 0 ? 0.8 : 0.65);
     previewLabel->setFntFile(newFntFile.c_str());

@@ -49,8 +49,18 @@ class $modify(GJBaseGameLayer) {
 			SecretUnlocks::m_clicksThisSession++;
 			SecretUnlocks::checkSessionUnlocks();
 
-			catNode->setFrame(catNode->m_lastPaw ? 2 : 3);
-			catNode->m_lastPaw = !catNode->m_lastPaw;
+			if (catNode->m_pawsToUse == 3) {
+				catNode->setFrame(catNode->m_lastPaw ? 2 : 3);
+				catNode->m_lastPaw = !catNode->m_lastPaw;
+			}
+
+			if (catNode->m_pawsToUse == 2) {
+				catNode->setFrame(2);
+			}
+
+			if (catNode->m_pawsToUse == 1) {
+				catNode->setFrame(3);
+			}
 		}
 
 		if (!down) {

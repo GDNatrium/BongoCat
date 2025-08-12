@@ -22,6 +22,8 @@ public:
 
 	void setFrame(int frame);
 
+	static Timer<> sessionTimer;
+
 private:
 	bool init();
 	void registerWithTouchDispatcher();

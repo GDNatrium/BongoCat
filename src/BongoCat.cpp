@@ -9,6 +9,7 @@ int BongoCat::m_decoID = 1;
 bool BongoCat::m_hideInLevel = false;
 bool BongoCat::m_hideCounter = false;
 int BongoCat::m_pawsToUse = 3;
+Timer<> BongoCat::sessionTimer;
 
 BongoCat* BongoCat::create() {
 	auto ret = new BongoCat();

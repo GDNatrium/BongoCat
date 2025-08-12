@@ -7,6 +7,7 @@ bool CustomizeMenu::added = false;
 std::vector<CustomizeMenu::Items> CustomizeMenu::cats;
 std::vector<CustomizeMenu::Items> CustomizeMenu::hats;
 std::vector<CustomizeMenu::Items> CustomizeMenu::deco;
+std::vector<CustomizeMenu::Items> CustomizeMenu::tables;
 
 void CustomizeMenu::addCats() {
     cats.push_back({ "Bongo", 0, "cat1_2.png"_spr, 1, "locked.png"_spr, "Default" });
@@ -16,9 +17,10 @@ void CustomizeMenu::addCats() {
     cats.push_back({ "Luna", 35000, "cat5_2.png"_spr, 5, "locked.png"_spr, "Click 35000 times" });
     cats.push_back({ "Robot", 40000, "cat6_2.png"_spr, 6, "locked.png"_spr, "Click 40000 times" });
     cats.push_back({ "Fox", 60000, "cat7_2.png"_spr, 7, "locked.png"_spr, "Click 60000 times" });
-    cats.push_back({ "Frog", 90000, "cat8_2.png"_spr, 8, "locked.png"_spr, "Click 90000 times" });
+    cats.push_back({ "Frog", 90000, "cat11_2.png"_spr, 11, "locked.png"_spr, "Click 90000 times" });
     cats.push_back({ "Axolotl", 100000, "cat9_2.png"_spr, 9, "locked.png"_spr, "Click 100000 times" });
     cats.push_back({ "Panda", -1, "cat10_2.png"_spr, 10, "locked.png"_spr, "Default", 3 });
+    cats.push_back({ "Maxwell", 1, "cat12_2.png"_spr, 12, "locked.png"_spr, "Temp" });
 }
 
 void CustomizeMenu::addHats() {
@@ -34,6 +36,7 @@ void CustomizeMenu::addHats() {
     hats.push_back({ "Crown", 100000, "extra10.png"_spr, 10, "extraLocked.png"_spr, "Click 100000 times" });
     hats.push_back({ "Buddy", -1, "extra12.png"_spr, 12, "extraLocked.png"_spr, "Default", 1 });
     hats.push_back({ "Leaf", -1, "extra11.png"_spr, 11, "extraLocked.png"_spr, "Default", 2 });
+    hats.push_back({ "Painter", 1, "extra13.png"_spr, 13, "extraLocked.png"_spr, "Temp" });
 }
 
 void CustomizeMenu::addDeco() {
@@ -42,6 +45,7 @@ void CustomizeMenu::addDeco() {
     deco.push_back({ "Moustache", 1500, "deco3.png"_spr, 3, "extraLocked.png"_spr, "Click 1500 times" });
     deco.push_back({ "Juice", 3000, "deco4.png"_spr, 4, "extraLocked.png"_spr, "Click 3000 times" });
     deco.push_back({ "Sunglasses", 4000, "deco5.png"_spr, 5, "extraLocked.png"_spr, "Click 4000 times" });
+    deco.push_back({ "CAT", -1, "deco6.png"_spr, 6, "extraLocked.png"_spr, "Default", 4 });
 }
 
 bool CustomizeMenu::setup() {
@@ -296,6 +300,10 @@ void CustomizeMenu::onLockedItem(CCObject* sender) {
     }
 
     if (tag >= 300 && tag < 400) {
+        if (deco[tag - 300].specialUnlock != 0) {
+            SecretUnlocks::secretUnlock(deco[tag - 300].specialUnlock);
+            return;
+        }
         desc = deco[tag - 300].unlockReq;
         extraText = "Deco";
     }

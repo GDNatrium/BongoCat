@@ -24,4 +24,9 @@ private:
 
 	static void secretThree();
 	static bool m_secret3; // 2500 clicks in 1 session
+
+	static void secretFour();
+	static bool m_secret4; // 30 mins in 1 session
+
+	static std::string formattedSessionTime();
 };

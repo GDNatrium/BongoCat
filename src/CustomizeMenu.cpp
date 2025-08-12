@@ -7,7 +7,6 @@ bool CustomizeMenu::added = false;
 std::vector<CustomizeMenu::Items> CustomizeMenu::cats;
 std::vector<CustomizeMenu::Items> CustomizeMenu::hats;
 std::vector<CustomizeMenu::Items> CustomizeMenu::deco;
-std::vector<CustomizeMenu::Items> CustomizeMenu::tables;
 
 void CustomizeMenu::addCats() {
     cats.push_back({ "Bongo", 0, "cat1_2.png"_spr, 1, "locked.png"_spr, "Default" });

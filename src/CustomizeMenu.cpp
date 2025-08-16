@@ -19,13 +19,14 @@ void CustomizeMenu::addCats() {
     cats.push_back({ "Frog", 90000, "cat11_2.png"_spr, 11, "locked.png"_spr, "Click 90000 times" });
     cats.push_back({ "Axolotl", 100000, "cat9_2.png"_spr, 9, "locked.png"_spr, "Click 100000 times" });
     cats.push_back({ "Panda", -1, "cat10_2.png"_spr, 10, "locked.png"_spr, "Default", 3 });
-    cats.push_back({ "Maxwell", 1, "cat12_2.png"_spr, 12, "locked.png"_spr, "Temp" });
+    cats.push_back({ "Maxwell", -1, "cat12_2.png"_spr, 12, "locked.png"_spr, "Default", 5 });
 }
 
 void CustomizeMenu::addHats() {
     hats.push_back({ "None", 0, "extra1.png"_spr, 1, "extraLocked.png"_spr, "Default" });
     hats.push_back({ "Party Hat", 500, "extra2.png"_spr, 2, "extraLocked.png"_spr, "Click 500 times" });
     hats.push_back({ "Beanie", 5000, "extra3.png"_spr, 3, "extraLocked.png"_spr, "Click 5000 times" });
+    hats.push_back({ "Bread", 10000, "extra14.png"_spr, 14, "extraLocked.png"_spr, "Click 10000 times" });
     hats.push_back({ "Chef", 20000, "extra4.png"_spr, 4, "extraLocked.png"_spr, "Click 20000 times" });
     hats.push_back({ "Sombrero", 30000, "extra5.png"_spr, 5, "extraLocked.png"_spr, "Click 30000 times" });
     hats.push_back({ "Dasher", 50000, "extra6.png"_spr, 6, "extraLocked.png"_spr, "Click 50000 times" });
@@ -34,8 +35,9 @@ void CustomizeMenu::addHats() {
     hats.push_back({ "Witch", 90000, "extra9.png"_spr, 9, "extraLocked.png"_spr, "Click 90000 times" });
     hats.push_back({ "Crown", 100000, "extra10.png"_spr, 10, "extraLocked.png"_spr, "Click 100000 times" });
     hats.push_back({ "Buddy", -1, "extra12.png"_spr, 12, "extraLocked.png"_spr, "Default", 1 });
+    hats.push_back({ "Painter", -1, "extra13.png"_spr, 13, "extraLocked.png"_spr, "Default", 6 });
     hats.push_back({ "Leaf", -1, "extra11.png"_spr, 11, "extraLocked.png"_spr, "Default", 2 });
-    hats.push_back({ "Painter", 1, "extra13.png"_spr, 13, "extraLocked.png"_spr, "Temp" });
+    hats.push_back({ "Amogus", -1, "extra15.png"_spr, 15, "extraLocked.png"_spr, "Default", 7 });
 }
 
 void CustomizeMenu::addDeco() {
@@ -92,7 +94,9 @@ bool CustomizeMenu::setup() {
 ScrollLayer* CustomizeMenu::createScrollLayer(std::vector<Items> items, int type, char const* titleTxt, bool defaultCat) {
     auto runningScene = CCDirector::sharedDirector()->getRunningScene();
     auto catNode = runningScene->getChildByID("natrium.bongo_cat/BongoCat");
-    int count = std::stoi(catNode->getChildByType<CCLabelBMFont>(0)->getString());
+    auto countCheck = numFromString<int>(catNode->getChildByType<CCLabelBMFont>(0)->getString());
+    auto count = 0;
+    if (countCheck.isOk()) count = countCheck.unwrap();
     auto winSize = CCDirector::sharedDirector()->getWinSize();
 
     auto scrollLayer = ScrollLayer::create({ 300, 200 });

@@ -5,6 +5,7 @@ using namespace geode::prelude;
 #include <Geode/modify/MenuLayer.hpp>
 #include <Geode/modify/VideoOptionsLayer.hpp>
 #include <Geode/modify/GJBaseGameLayer.hpp>
+#include <Geode/modify/GJShopLayer.hpp>
 
 #include "BongoCat.hpp"
 #include "BongoSettings.hpp"
@@ -41,7 +42,9 @@ class $modify(GJBaseGameLayer) {
 			auto catNode = runningScene->getChildByType<BongoCat>(0);
 
 			auto label = catNode->getChildByType<CCLabelBMFont>(0);
-			auto count = std::stoi(label->getString());
+			auto countCheck = numFromString<int>(label->getString());
+			auto count = 0;
+			if (countCheck.isOk()) count = countCheck.unwrap();
 			label->setString(std::to_string(count + 1).c_str());
 
 			Mod::get()->setSavedValue<int>("count", count + 1);
@@ -130,3 +133,41 @@ SettingNode* BongoSettings::createNode(float width) {
 $execute{
 	(void)Mod::get()->registerCustomSettingType("open-menu", &BongoSettings::parse);
 }
+
+class $modify(ModifiedShop, GJShopLayer) {
+	bool init(ShopType p0) {
+		if (!GJShopLayer::init(p0)) return false;
+
+		if (!SecretUnlocks::m_hideAndSeekActive) return true;
+		if (p0 != ShopType::Normal) return true;
+
+		auto menu = CCMenu::create();
+		menu->setZOrder(2);
+		menu->setPosition(ccp(0, 0));
+		this->addChild(menu);
+
+		auto hiddenSpr = CCSprite::createWithSpriteFrameName("extra15.png"_spr);
+		hiddenSpr->setFlipX(true);
+		hiddenSpr->setScale(1.5);
+
+		auto hiddenBtn = CCMenuItemSpriteExtra::create(hiddenSpr, this, menu_selector(ModifiedShop::onFoundHidden));
+		hiddenBtn->setPosition(ccp(105, 45));
+		hiddenBtn->m_scaleMultiplier = 1.1;
+		menu->addChild(hiddenBtn);
+
+		return true;
+	}
+
+	void onFoundHidden(CCObject* sender) {
+		SecretUnlocks::m_hideAndSeekActive = false;
+
+		FLAlertLayer::create("Hide and Seek",
+			"Aww you found me! I am not a good loser, but I think you deserve a <cj>reward</c>.\n"
+			"<cy>I unlocked a new hat for you!</c>",
+			"OK")->show();
+
+		SecretUnlocks::setUnlockSecret(7, true);
+
+		static_cast<CCMenuItemSpriteExtra*>(sender)->setEnabled(false);
+	}
+};

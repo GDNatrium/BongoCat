@@ -4,16 +4,15 @@
 ## <cy>Unlockables</c>
 Unlock new designs and decorations by reaching click counts.
 - 11 Bongo Cat Designs
-- 11 Hats
-- 4 Extra Decorations
+- 14 Hats
+- 5 Extra Decorations
 - and many more coming soon!
 
-## <co>Suggestions & Bug Reports</c>
-If you encounter bugs, or have suggestions for new unlocks, please submit them [HERE](https://forms.gle/nyt9qGCt4HGody666).
-Feel free to submit any ideas for new unlocks, or maybe even new kind of add-ons altogether.
+## <co>Bug Reports</c>
+If you encounter bugs, please open an issue on the github page and include as much information as possible.
 
 ## <cr>Settings</c>
-You can change Bongo Cat settings from anywhere through it's own menu next to the counter.
+You can change Bongo Cat settings from anywhere through it's own menu next to the counter, or through the Geode mod settings (bottom left of this screen).
 - Change the scale, alignment and position of Bongo Cat
 - Disable Bongo Cat during levels
 - Hide or customize the counter

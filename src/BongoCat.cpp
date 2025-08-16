@@ -144,12 +144,15 @@ void BongoCat::registerWithTouchDispatcher() {
 
 bool BongoCat::ccTouchBegan(CCTouch* touch, CCEvent* event) {
 	auto pauseLayer = CCDirector::sharedDirector()->getRunningScene()->getChildByType<PauseLayer>(0);
-	if (PlayLayer::get() && !pauseLayer) return true;
+	auto playLayer = PlayLayer::get();
+	if (playLayer && !pauseLayer && !playLayer->getChildByType<EndLevelLayer>(0)) return true;
 
 	if (GJBaseGameLayer::get() && GJBaseGameLayer::get()->m_playbackMode == PlaybackMode::Playing) return true;
 
 	auto label = this->getChildByType<CCLabelBMFont>(0);
-	auto count = std::stoi(label->getString());
+	auto countCheck = numFromString<int>(label->getString());
+	auto count = 0;
+	if (countCheck.isOk()) count = countCheck.unwrap();
 	label->setString(std::to_string(count + 1).c_str());
 
 	Mod::get()->setSavedValue<int>("count", count + 1);
@@ -190,7 +193,7 @@ void BongoCat::setToTop(float dt) {
 	auto runningScene = CCDirector::sharedDirector()->getRunningScene();
 
 	if (m_hideCounter) {
-		auto bongoCat = runningScene->getChildByType<BongoCat*>(0);
+		auto bongoCat = runningScene->getChildByType<BongoCat>(0);
 		if (!bongoCat) return;
 
 		bongoCat->getChildByType<CCScale9Sprite>(0)->setVisible(false);
@@ -199,7 +202,7 @@ void BongoCat::setToTop(float dt) {
 		bongoCat->getChildByType<CCLabelBMFont>(0)->setVisible(false);
 	}
 	else {
-		auto bongoCat = runningScene->getChildByType<BongoCat*>(0);
+		auto bongoCat = runningScene->getChildByType<BongoCat>(0);
 		if (!bongoCat) return;
 
 		bongoCat->getChildByType<CCScale9Sprite>(0)->setVisible(true);
@@ -243,8 +246,11 @@ void BongoCat::setToTop(float dt) {
 	auto highest = static_cast<CCNode*>(children->objectAtIndex(children->count() - 1));
 
 	if (highest->getID() == "natrium.bongo_cat/BongoCat") {
-		auto secondHighest = static_cast<CCNode*>(children->objectAtIndex(children->count() - 2));
-		this->setZOrder(secondHighest->getZOrder() + 1);
+		if (runningScene->getChildrenCount() > 1) {
+			auto secondHighest = static_cast<CCNode*>(children->objectAtIndex(children->count() - 2));
+			this->setZOrder(secondHighest->getZOrder() + 1);
+		}
+		else this->setZOrder(999);
 	}
 	else {
 		this->setZOrder(highest->getZOrder() + 1);

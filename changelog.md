@@ -4,7 +4,10 @@ Also add unlock requirements to maxwell and painter
 - <cg>Added</c> new items.
 - <cg>Added</c> new unlock types.
 - <cy>Improved</c> visuals of some cats and items.
+- <cy>Improved</c> logic which moves bongo cat to the top.
 - <cr>Fixed</c> paw settings not working during levels.
+- <cr>Fixed</c> clicks not working on end screens.
+- <cr>Fixed</c> specific crash on graphics reload.
 
 # 1.2.0
 - <cg>Added</c> new kind of unlocks & secrets!

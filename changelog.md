@@ -1,6 +1,4 @@
 # 1.3.0
-Remember to update about.md with item count
-Also add unlock requirements to maxwell and painter
 - <cg>Added</c> new items.
 - <cg>Added</c> new unlock types.
 - <cy>Improved</c> visuals of some cats and items.
